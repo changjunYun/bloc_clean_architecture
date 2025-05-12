@@ -1,13 +1,13 @@
-import 'package:bloc/bloc.dart';
 import 'package:bloc_clean_architecture/src/user/domain/usecases/get_user.dart';
 import 'package:bloc_clean_architecture/src/user/domain/usecases/update_user.dart';
 import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_state.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../domain/usecases/create_user.dart';
 import '../../domain/usecases/delete_user.dart';
 
-class UserCubit extends Cubit<UserState> {
-  UserCubit(
+class UserNotifier extends ChangeNotifier {
+  UserNotifier(
       {required CreateUser createUser,
       required GetUser getUser,
       required UpdateUser updateUser,
@@ -16,18 +16,26 @@ class UserCubit extends Cubit<UserState> {
         _getUser = getUser,
         _updateUser = updateUser,
         _deleteUser = deleteUser,
-        super(const UserInitial());
+        super();
 
   final CreateUser _createUser;
   final GetUser _getUser;
   final UpdateUser _updateUser;
   final DeleteUser _deleteUser;
 
+  UserState _state = UserInitial();
+  UserState get state => _state;
+
+  void _emit(UserState state) {
+    _state = state;
+    notifyListeners();
+  }
+
   Future<void> createUser({
     required String createdAt,
     required String name,
   }) async {
-    emit(const CreatingUser());
+    _emit(const CreatingUser());
 
     final result = await _createUser(CreateUserParams(
       createdAt: createdAt,
@@ -35,8 +43,8 @@ class UserCubit extends Cubit<UserState> {
     ));
 
     result.fold(
-      (failure) => emit(UserError(failure.errorMessage)),
-      (_) => emit(const UserCreated()),
+      (failure) => _emit(UserError(failure.errorMessage)),
+      (_) => getUser(),
     );
   }
 
@@ -45,39 +53,39 @@ class UserCubit extends Cubit<UserState> {
     required String updatedAt,
     required String name,
   }) async {
-    emit(const UpdatingUser());
+    _emit(const UpdatingUser());
 
     final result = await _updateUser(
         UpdateUserParams(id: id, updatedAt: updatedAt, name: name));
 
     result.fold(
-      (failure) => emit(UserError(failure.errorMessage)),
-      (_) => emit(const UserUpdated()),
+      (failure) => _emit(UserError(failure.errorMessage)),
+      (_) => getUser(),
     );
   }
 
   Future<void> deleteUser({
     required String id
   }) async {
-    emit(const DeletingUser());
+    _emit(const DeletingUser());
 
     final result = await _deleteUser(
       DeleteUserUserParams(id: id));
 
     result.fold(
-          (failure) => emit(UserError(failure.errorMessage)),
-          (_) => emit(const UserDeleted()),
+          (failure) => _emit(UserError(failure.errorMessage)),
+          (_) => getUser(),
     );
   }
 
   Future<void> getUser() async {
-    emit(const GettingUsers());
+    _emit(const GettingUsers());
 
     final result = await _getUser();
 
     result.fold(
-      (failure) => emit(UserError(failure.errorMessage)),
-      (users) => emit(UsersLoaded(users)),
+      (failure) => _emit(UserError(failure.errorMessage)),
+      (users) => _emit(UsersLoaded(users)),
     );
   }
 }

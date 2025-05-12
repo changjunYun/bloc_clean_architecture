@@ -7,7 +7,7 @@ import '../../src/user/data/repositories/user_repository_implementation.dart';
 import '../../src/user/domain/repositories/user_repository.dart';
 import '../../src/user/domain/usecases/create_user.dart';
 import '../../src/user/domain/usecases/get_user.dart';
-import '../../src/user/presentation/cubit/user_cubit.dart';
+import '../../src/user/presentation/cubit/user_notifier.dart';
 import 'package:http/http.dart' as http;
 
 final getIt = GetIt.instance;
@@ -15,7 +15,7 @@ final getIt = GetIt.instance;
 Future<void> init() async {
   getIt
     ..registerFactory(() =>
-        UserCubit(createUser: getIt(), getUser: getIt(), updateUser: getIt(), deleteUser: getIt()))
+        UserNotifier(createUser: getIt(), getUser: getIt(), updateUser: getIt(), deleteUser: getIt()))
 
     // Use cases
     ..registerLazySingleton(() => CreateUser(getIt()))

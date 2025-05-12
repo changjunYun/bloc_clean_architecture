@@ -1,7 +1,7 @@
-import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_cubit.dart';
+import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_notifier.dart';
 import 'package:bloc_clean_architecture/src/user/presentation/view/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'core/services/injection_container.dart';
 
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<UserCubit>()..getUser(),
+    return ChangeNotifierProvider(
+      create: (context) => getIt<UserNotifier>()..getUser(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
