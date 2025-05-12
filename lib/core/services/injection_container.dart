@@ -7,8 +7,9 @@ import '../../src/user/data/repositories/user_repository_implementation.dart';
 import '../../src/user/domain/repositories/user_repository.dart';
 import '../../src/user/domain/usecases/create_user.dart';
 import '../../src/user/domain/usecases/get_user.dart';
-import '../../src/user/presentation/cubit/user_notifier.dart';
 import 'package:http/http.dart' as http;
+
+import '../../src/user/presentation/notifier/user_notifier.dart';
 
 final getIt = GetIt.instance;
 
