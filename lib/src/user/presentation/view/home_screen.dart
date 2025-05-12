@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
-          } else if (state is UserCreated || state is UserUpdated) {
+          } else if (state is UserCreated || state is UserUpdated || state is UserDeleted) {
             context.read<UserCubit>().getUser();
           }
         },
@@ -35,7 +35,6 @@ class HomeScreen extends StatelessWidget {
                       isScrollControlled: true,
                       builder: (_) {
                         final TextEditingController nameController = TextEditingController(text: user.name);
-
                         return Padding(
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -77,8 +76,26 @@ class HomeScreen extends StatelessWidget {
                       },
                     );
                   },
-                  title: Text(user.name),
-                  subtitle: Text('생성일: ${user.createdAt}'),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(user.name),
+                          Text('생성일: ${user.createdAt}'),
+                          Text('최근 수정일 : ${user.updatedAt}')
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          context.read<UserCubit>().deleteUser(id: state.users[index].id);
+                        },
+                        child: SizedBox(
+                          child: Icon(Icons.delete),
+                        ),
+                      )
+                    ],
+                  ),
                 );
               },
             );

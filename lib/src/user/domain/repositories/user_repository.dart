@@ -12,4 +12,7 @@ abstract class UserRepository{
 
   // User 데이터를 수정하는 함수
   ResultVoid updateUser({required String id, required String updatedAt, required String name});
+
+  // User 데이터를 삭제하는 함수
+  ResultVoid deleteUser({required String id});
 }

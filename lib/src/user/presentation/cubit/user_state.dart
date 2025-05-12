@@ -36,6 +36,16 @@ class GettingUsers extends UserState {
   const GettingUsers();
 }
 
+// 사용자 삭제중
+class DeletingUser extends UserState{
+  const DeletingUser();
+}
+
+// 사용자 삭제 완료
+class UserDeleted extends UserState{
+  const UserDeleted();
+}
+
 // 사용자 목록 로딩 완료
 class UsersLoaded extends UserState {
   const UsersLoaded(this.users);

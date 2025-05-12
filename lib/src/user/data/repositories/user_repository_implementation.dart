@@ -41,4 +41,14 @@ class UserRepositoryImplementation implements UserRepository {
       return Left(APIFailure.fromException(e));
     }
   }
+
+  @override
+  ResultVoid deleteUser({required String id}) async{
+    try {
+      await _remoteDataSource.deleteUser(id : id);
+      return const Right(null);
+    }on APIException catch(e){
+      return Left(APIFailure.fromException(e));
+    }
+  }
 }

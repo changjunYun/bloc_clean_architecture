@@ -1,3 +1,4 @@
+import 'package:bloc_clean_architecture/src/user/domain/usecases/delete_user.dart';
 import 'package:bloc_clean_architecture/src/user/domain/usecases/update_user.dart';
 import 'package:get_it/get_it.dart';
 
@@ -14,12 +15,14 @@ final getIt = GetIt.instance;
 Future<void> init() async {
   getIt
     ..registerFactory(() =>
-        UserCubit(createUser: getIt(), getUser: getIt(), updateUser: getIt()))
+        UserCubit(createUser: getIt(), getUser: getIt(), updateUser: getIt(), deleteUser: getIt()))
 
     // Use cases
     ..registerLazySingleton(() => CreateUser(getIt()))
     ..registerLazySingleton(() => GetUser(getIt()))
     ..registerLazySingleton(() => UpdateUser(getIt()))
+    ..registerLazySingleton(() => DeleteUser(getIt()))
+
 
     // Repositories
     ..registerLazySingleton<UserRepository>(

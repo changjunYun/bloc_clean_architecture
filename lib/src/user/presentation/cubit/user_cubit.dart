@@ -4,20 +4,24 @@ import 'package:bloc_clean_architecture/src/user/domain/usecases/update_user.dar
 import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_state.dart';
 
 import '../../domain/usecases/create_user.dart';
+import '../../domain/usecases/delete_user.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit(
       {required CreateUser createUser,
       required GetUser getUser,
-      required UpdateUser updateUser})
+      required UpdateUser updateUser,
+      required DeleteUser deleteUser})
       : _createUser = createUser,
         _getUser = getUser,
         _updateUser = updateUser,
+        _deleteUser = deleteUser,
         super(const UserInitial());
 
   final CreateUser _createUser;
   final GetUser _getUser;
   final UpdateUser _updateUser;
+  final DeleteUser _deleteUser;
 
   Future<void> createUser({
     required String createdAt,
@@ -43,11 +47,26 @@ class UserCubit extends Cubit<UserState> {
   }) async {
     emit(const UpdatingUser());
 
-    final result = await _updateUser(UpdateUserParams(id: id, updatedAt: updatedAt, name: name));
+    final result = await _updateUser(
+        UpdateUserParams(id: id, updatedAt: updatedAt, name: name));
+
+    result.fold(
+      (failure) => emit(UserError(failure.errorMessage)),
+      (_) => emit(const UserUpdated()),
+    );
+  }
+
+  Future<void> deleteUser({
+    required String id
+  }) async {
+    emit(const DeletingUser());
+
+    final result = await _deleteUser(
+      DeleteUserUserParams(id: id));
 
     result.fold(
           (failure) => emit(UserError(failure.errorMessage)),
-          (_) => emit(const UserUpdated()),
+          (_) => emit(const UserDeleted()),
     );
   }
 

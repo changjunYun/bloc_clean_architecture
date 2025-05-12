@@ -9,10 +9,9 @@ import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
   Future<void> createUser({required String createdAt, required String name,});
-
   Future<List<User>> getUser();
-
   Future<void> updateUser({required String id, required String updatedAt, required String name});
+  Future<void> deleteUser({required String id});
 }
 
 const kCreateUserEndpoint = '/users';
@@ -88,6 +87,24 @@ class UserRemoteDataSrcImpl implements UserRemoteDataSource {
             'updatedAt': updatedAt,
             'name': name,
           }),
+          headers: {'Content-Type': 'application/json'});
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw APIException(
+          message: response.body,
+          statusCode: response.statusCode,
+        );
+      }
+    } on APIException {
+      rethrow;
+    } catch (e) {
+      throw APIException(message: e.toString(), statusCode: 505);
+    }
+  }
+
+  @override
+  Future<void> deleteUser({required String id})  async{
+    try {
+      final response = await _client.delete(Uri.https(kBaseUrl, '$kCreateUserEndpoint/$id'),
           headers: {'Content-Type': 'application/json'});
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw APIException(
