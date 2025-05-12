@@ -1,3 +1,4 @@
+import 'package:bloc_clean_architecture/src/user/domain/usecases/update_user.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../src/user/data/datasources/user_remote_data_source.dart';
@@ -12,23 +13,22 @@ final getIt = GetIt.instance;
 
 Future<void> init() async {
   getIt
-    ..registerFactory(() => UserCubit(
-      createUser: getIt(),
-     getUser: getIt(),
-    ))
+    ..registerFactory(() =>
+        UserCubit(createUser: getIt(), getUser: getIt(), updateUser: getIt()))
 
-  // Use cases
+    // Use cases
     ..registerLazySingleton(() => CreateUser(getIt()))
     ..registerLazySingleton(() => GetUser(getIt()))
+    ..registerLazySingleton(() => UpdateUser(getIt()))
 
-  // Repositories
+    // Repositories
     ..registerLazySingleton<UserRepository>(
-            () => UserRepositoryImplementation(getIt()))
+        () => UserRepositoryImplementation(getIt()))
 
-  // Data Sources
+    // Data Sources
     ..registerLazySingleton<UserRemoteDataSource>(
-            () => UserRemoteDataSrcImpl(getIt()))
+        () => UserRemoteDataSrcImpl(getIt()))
 
-  // External Dependencies
+    // External Dependencies
     ..registerLazySingleton(http.Client.new);
 }

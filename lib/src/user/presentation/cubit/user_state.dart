@@ -18,14 +18,22 @@ class CreatingUser extends UserState {
   const CreatingUser();
 }
 
+// 사용자 생성 완료
+class UserCreated extends UserState {
+  const UserCreated();
+}
+// 사용자 수정 중
+class UpdatingUser extends UserState {
+  const UpdatingUser();
+}
+
+// 사용자 수정 완료
+class UserUpdated extends UserState {
+  const UserUpdated();
+}
 // 사용자 목록 요청 중
 class GettingUsers extends UserState {
   const GettingUsers();
-}
-
-// 사용자 생성 중
-class UserCreated extends UserState {
-  const UserCreated();
 }
 
 // 사용자 목록 로딩 완료

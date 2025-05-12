@@ -7,12 +7,12 @@ import '../../../../core/error/exceptions.dart';
 import '../../../../core/utils/constants.dart';
 import '../models/user_model.dart';
 
-abstract class UserRemoteDataSource{
-  Future<void> createUser({
-    required String createdAt,
-    required String name,
-  });
+abstract class UserRemoteDataSource {
+  Future<void> createUser({required String createdAt, required String name,});
+
   Future<List<User>> getUser();
+
+  Future<void> updateUser({required String id, required String updatedAt, required String name});
 }
 
 const kCreateUserEndpoint = '/users';
@@ -28,24 +28,22 @@ class UserRemoteDataSrcImpl implements UserRemoteDataSource {
     required String name,
   }) async {
     try {
-      final response = await _client.post(
-          Uri.https(kBaseUrl, kCreateUserEndpoint),
-          body: jsonEncode({
-            'createdAt': createdAt,
-            'name': name,
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-      );
-      if(response.statusCode != 200 && response.statusCode != 201) {
-        throw APIException(message: response.body,
+      final response =
+          await _client.post(Uri.https(kBaseUrl, kCreateUserEndpoint),
+              body: jsonEncode({
+                'createdAt': createdAt,
+                'name': name,
+              }),
+              headers: {'Content-Type': 'application/json'});
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw APIException(
+          message: response.body,
           statusCode: response.statusCode,
         );
       }
     } on APIException {
       rethrow;
-    } catch(e) {
+    } catch (e) {
       throw APIException(message: e.toString(), statusCode: 505);
     }
   }
@@ -74,6 +72,29 @@ class UserRemoteDataSrcImpl implements UserRemoteDataSource {
           .toList();
 
       return users;
+    } on APIException {
+      rethrow;
+    } catch (e) {
+      throw APIException(message: e.toString(), statusCode: 505);
+    }
+  }
+
+  // 유저를 수정하는 api
+  @override
+  Future<void> updateUser({required String id, required String updatedAt, required String name}) async {
+    try {
+      final response = await _client.put(Uri.https(kBaseUrl, '$kCreateUserEndpoint/$id'),
+          body: jsonEncode({
+            'updatedAt': updatedAt,
+            'name': name,
+          }),
+          headers: {'Content-Type': 'application/json'});
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw APIException(
+          message: response.body,
+          statusCode: response.statusCode,
+        );
+      }
     } on APIException {
       rethrow;
     } catch (e) {

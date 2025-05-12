@@ -1,22 +1,25 @@
 import 'package:bloc_clean_architecture/core/utils/typedef.dart';
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable{
+class User extends Equatable {
   const User({
     required this.id,
     required this.createdAt,
     required this.name,
+    this.updatedAt,
   });
+
   const User.empty()
       : this(
-    id: "1",
-    createdAt: '_empty.createdAt',
-    name: '_empty.name',
+            id: "1",
+            createdAt: '_empty.createdAt',
+            name: '_empty.name',
+            updatedAt: '_empty.updatedAt');
 
-  );
   final String id;
   final String createdAt;
   final String name;
+  final String? updatedAt;
 
   // id만 같으면 같은 사용자로 본다
   @override

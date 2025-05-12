@@ -14,14 +14,20 @@ class UserRepositoryImplementation implements UserRepository {
   final UserRemoteDataSource _remoteDataSource;
 
   @override
-  ResultVoid createUser({
-    required String createdAt,
-    required String name,
-  }) async {
+  ResultVoid createUser({required String createdAt, required String name,}) async {
     try {
       await _remoteDataSource.createUser(createdAt: createdAt, name: name);
       return const Right(null);
     } on APIException catch (e) {
+      return Left(APIFailure.fromException(e));
+    }
+  }
+  @override
+  ResultVoid updateUser({required String id, required String updatedAt, required String name}) async{
+    try {
+      await _remoteDataSource.updateUser(id : id, updatedAt: updatedAt, name: name);
+      return const Right(null);
+    }on APIException catch(e){
       return Left(APIFailure.fromException(e));
     }
   }

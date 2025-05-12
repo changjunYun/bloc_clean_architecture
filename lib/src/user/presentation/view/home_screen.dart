@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
-          } else if (state is UserCreated) {
+          } else if (state is UserCreated || state is UserUpdated) {
             context.read<UserCubit>().getUser();
           }
         },
@@ -29,6 +29,54 @@ class HomeScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final user = state.users[index];
                 return ListTile(
+                  onTap: (){
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        final TextEditingController nameController = TextEditingController(text: user.name);
+
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                            left: 16,
+                            right: 16,
+                            top: 24,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('사용자 정보 수정', style: Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 12),
+                              TextField(
+                                controller: nameController,
+                                decoration: const InputDecoration(labelText: '이름'),
+                              ),
+                              const SizedBox(height: 12),
+                              ElevatedButton(
+                                onPressed: () {
+                                  String _two(int n) => n.toString().padLeft(2, '0');
+
+                                  final now = DateTime.now().toUtc().add(const Duration(hours: 9));
+                                  final formatted = '${now.year}-${_two(now.month)}-${_two(now.day)} '
+                                      '${_two(now.hour)}:${_two(now.minute)}:${_two(now.second)}';
+
+                                  Navigator.pop(context);
+                                  context.read<UserCubit>().updateUser(
+                                    id: state.users[index].id,
+                                    updatedAt: formatted,
+                                    name: nameController.text,
+                                  );
+                                },
+                                child: const Text('수정하기'),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
                   title: Text(user.name),
                   subtitle: Text('생성일: ${user.createdAt}'),
                 );

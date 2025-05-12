@@ -8,6 +8,7 @@ class UserModel extends User {
     required super.id,
     required super.createdAt,
     required super.name,
+    super.updatedAt
   });
 
   const UserModel.empty()
@@ -15,6 +16,7 @@ class UserModel extends User {
     id: "1",
     createdAt: '_empty.createdAt',
     name: '_empty.name',
+    updatedAt: 'empty.updatedAt'
   );
 
   factory UserModel.fromJson(String source) =>
@@ -25,6 +27,7 @@ class UserModel extends User {
     id: map['id'] as String,
     createdAt: map['createdAt'] as String,
     name: map['name'] as String,
+    updatedAt: map['updatedAt'] as String,
 
   );
 
@@ -32,12 +35,14 @@ class UserModel extends User {
     String? id,
     String? createdAt,
     String? name,
+    String? updatedAt
 
   }) {
     return UserModel(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         name: name?? this.name,
+      updatedAt: updatedAt ?? this.name
     );
   }
 
@@ -45,6 +50,7 @@ class UserModel extends User {
     'id': id,
     'createdAt': createdAt,
     'name': name,
+    'updatedAt' : updatedAt
   };
 
   String toJson() => jsonEncode(toMap());
