@@ -1,4 +1,4 @@
-import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_notifier.dart';
+import 'package:bloc_clean_architecture/src/user/presentation/notifier/user_notifier.dart';
 import 'package:bloc_clean_architecture/src/user/presentation/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

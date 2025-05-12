@@ -1,6 +1,6 @@
 import 'package:bloc_clean_architecture/src/user/domain/usecases/get_user.dart';
 import 'package:bloc_clean_architecture/src/user/domain/usecases/update_user.dart';
-import 'package:bloc_clean_architecture/src/user/presentation/cubit/user_state.dart';
+import 'package:bloc_clean_architecture/src/user/presentation/notifier/user_state.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/usecases/create_user.dart';
