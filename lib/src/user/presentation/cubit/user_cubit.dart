@@ -28,7 +28,7 @@ class UserCubit extends Cubit<UserState> {
     required String name,
   }) async {
     emit(const CreatingUser());
-
+    // 원래는 await _createUser.call() 인데 call이 생략됨
     final result = await _createUser(CreateUserParams(
       createdAt: createdAt,
       name: name,
